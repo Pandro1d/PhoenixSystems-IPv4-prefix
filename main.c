@@ -17,21 +17,24 @@ int add(unsigned int, char);
 int del(unsigned int, char);
 inline char check(unsigned int);
 unsigned int binPow(unsigned int);
-unsigned int ipToIntCon(const char *);
+unsigned int ipToIntConv(const char *);
 unsigned int maskLengthConv(char);
-int sortPrefixData(struct prefix_data_base *data);
+int sortPrefixData(); //Simple, once run bubble sort to sort added prefix to database by mask length
 //GLOBAL VAR
     struct prefix_data_base dataBase = {{0,0,0}, 0};
 //
 
 int main() {
-    printf("%u\n", ipToIntCon("32.64.128.0"));
-    printf("%s\n", (!add(ipToIntCon("32.64.128.0"), 20))? "OK" : "NOK");
-    printf("%s\n", (!add(ipToIntCon("32.64.128.0"), 20))? "OK" : "NOK"); //Check if the same prefix will be added
-    printf("%s\n", (!add(ipToIntCon("10.20.0.0"), 15))? "OK" : "NOK");
-    printf("%s\n", (!add(ipToIntCon("10.20.0.0"), 32))? "OK" : "NOK");
-    check(ipToIntCon("32.64.128.1"));
-    check(ipToIntCon("10.20.0.0"));
+    int i = 1;
+    printf("Test no %d, %s\n", i++, (!add(ipToIntConv("32.64.128.0"), 20)) ? "OK" : "NOK");
+    printf("Test no %d, %s\n", i++, (!add(ipToIntConv("32.64.128.0"), 20)) ? "OK" : "NOK"); //Check if the same prefix will be added
+    printf("Test no %d, %s\n", i++, (!add(ipToIntConv("11.20.0.0"), 16)) ? "OK" : "NOK");
+    printf("Test no %d, %s\n", i++, (!add(ipToIntConv("10.20.0.0"), 15)) ? "OK" : "NOK");
+    printf("Test no %d, %s\n", i++, (!add(ipToIntConv("10.20.0.0"), 16)) ? "OK" : "NOK");
+    printf("Test no %d, %s\n", i++, (!add(ipToIntConv("10.20.0.0"), 32)) ? "OK" : "NOK");
+    printf("Test no %d, Mask length: %d\n", i++,check(ipToIntConv("32.64.128.1")));
+    printf("Test no %d, Mask length: %d\n", i++,check(ipToIntConv("10.20.0.0")));
+    printf("Test no %d, Mask length: %d\n", i,check(ipToIntConv("10.22.0.0"))); //Should return -1 (it is not in the prefix database)
 
     return 0;
 }
@@ -68,7 +71,7 @@ int add(const unsigned int base, const char mask){
     }
     return 0;
 }
-unsigned int ipToIntCon(const char *ip) {
+unsigned int ipToIntConv(const char *ip) {
 
     const char *p = ip;
     char *end;
@@ -93,14 +96,21 @@ unsigned int maskLengthConv(const char mask) {
 }
 
 char check(unsigned int ip) {
-    return 'l';
+    unsigned int buff;
+    for(int i = 0; i<dataBase.dataSize; i++) {
+        buff = ip & dataBase.data[i].mask;
+        if(buff == dataBase.data[i].base) {
+            return dataBase.data[i].mask_length;
+        }
+    }
+    return -1; //Not found ip in prefix database
 }
 
-int sortPrefixData(struct prefix_data_base *data) {
+int sortPrefixData() {
     struct prefix buff;
-    if(!dataBase.dataSize || dataBase.dataSize==1) return -1; //Nothing to sort
+    if(dataBase.dataSize<2) return -1; //Nothing to sort
     else {
-        for(int step=(int)dataBase.dataSize; step>=1; step--){
+        for(int step=(int)dataBase.dataSize-1; step>=1; step--){
             if(dataBase.data[step].mask_length<=dataBase.data[step - 1].mask_length) return 0;
             else {
                 buff = dataBase.data[step-1];
