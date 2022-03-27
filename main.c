@@ -72,13 +72,13 @@ unsigned int ipToIntCon(const char *ip) {
 
     const char *p = ip;
     char *end;
-    unsigned long a = strtoul(p, &end, 10);
+    unsigned int a = strtoul(p, &end, 10);
     if (*end != '.') return -1;
-    unsigned long b = strtoul(end + 1, &end, 10);
+    unsigned int b = strtoul(end + 1, &end, 10);
     if (*end != '.') return -1;
-    unsigned long c = strtoul(end + 1, &end, 10);
+    unsigned int c = strtoul(end + 1, &end, 10);
     if (*end != '.') return -1;
-    unsigned long d = strtoul(end + 1, &end, 10);
+    unsigned int d = strtoul(end + 1, &end, 10);
     if (*end) return -1;
 
     return ((a << 24) | (b << 16) | (c << 8) | d);
