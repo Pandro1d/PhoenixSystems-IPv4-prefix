@@ -2,13 +2,13 @@
 #include <stdlib.h>
 #define MAX_DATA_SIZE 100 //Depends on size we need (can be of course changed into dynamic allocation, but it is slower)
 
-struct prefix {
+struct __attribute__((__packed__))prefix {
     unsigned int base;
     unsigned int mask; //Conversion from mask length made during adding process - thanks to that checking will be faster.
     char mask_length;
 };
 
-struct prefix_data_base { //Struct which contains sorted prefixes from the highest mask number to its lowest number.
+struct __attribute__((__packed__))prefix_data_base { //Struct which contains sorted prefixes from the highest mask number to its lowest number.
     struct prefix data[MAX_DATA_SIZE];
     unsigned int dataSize;
 };
@@ -26,6 +26,10 @@ int sortPrefixData(); //Simple, once run bubble sort to sort added prefix to dat
 
 int main() {
     int i = 1;
+    struct prefix buff;
+    struct prefix_data_base buff1;
+    printf("%llu\n", sizeof(buff));
+    printf("%llu\n", sizeof(buff1));
     printf("Test no %d, %s\n", i++, (!add(ipToIntConv("32.64.128.0"), 20)) ? "OK" : "NOK");
     printf("Test no %d, %s\n", i++, (!add(ipToIntConv("32.64.128.0"), 20)) ? "OK" : "NOK"); //Check if the same prefix will be added
     printf("Test no %d, %s\n", i++, (!add(ipToIntConv("11.20.0.0"), 16)) ? "OK" : "NOK");
@@ -48,7 +52,14 @@ unsigned int binPow(unsigned int power) {
     }
     return result;
 }
-
+int del(const unsigned int base, const char mask) {
+    for(int i = (int)dataBase.dataSize; i>=0; i--) {
+        if(dataBase.data[dataBase.dataSize - i].base==base && dataBase.data[dataBase.dataSize - i].mask_length==mask) {
+            return 0; //This prefix is already in the database
+        }
+    }
+    return -1;
+}
 int add(const unsigned int base, const char mask){
 
     if(mask > (char)32) return -1;
@@ -96,10 +107,8 @@ unsigned int maskLengthConv(const char mask) {
 }
 
 char check(unsigned int ip) {
-    unsigned int buff;
     for(int i = 0; i<dataBase.dataSize; i++) {
-        buff = ip & dataBase.data[i].mask;
-        if(buff == dataBase.data[i].base) {
+        if((ip & dataBase.data[i].mask) == dataBase.data[i].base) {
             return dataBase.data[i].mask_length;
         }
     }
@@ -119,6 +128,5 @@ int sortPrefixData() {
             }
         }
     }
-
     return 0;
 }
