@@ -13,7 +13,7 @@ struct __attribute__((__packed__))prefix_data_base { //Struct which contains sor
     struct prefix data[MAX_DATA_SIZE];
     unsigned int dataSize;
 };
-//
+//Function definitions
 int add(unsigned int, char);
 int del(unsigned int, char);
 inline char check(unsigned int);
@@ -21,29 +21,42 @@ unsigned int binPow(unsigned int);
 unsigned int ipToIntConv(const char *);
 unsigned int maskLengthConv(char);
 int sortPrefixData(); //Simple, once run bubble sort to sort added prefix to database by mask length
+
+void testFor_add_del_fun(int, unsigned *);
+void testFor_check_fun(char, unsigned *);
+
 //GLOBAL VAR
-    struct prefix_data_base dataBase = {{0,0,0}, 0};
-//
+struct prefix_data_base dataBase = {{0,0,0}, 0};
+
 
 int main() {
-    unsigned int i = 1;
-
-    printf("Test no %d, %s\n", i++, (!add(ipToIntConv("32.64.128.0"), 20)) ? "OK" : "NOK");
-    printf("Test no %d, %s\n", i++, (!add(ipToIntConv("32.64.128.0"), 20)) ? "OK" : "NOK"); //Check if the same prefix will be added
-    printf("Test no %d, %s\n", i++, (!add(ipToIntConv("11.20.0.0"), 16)) ? "OK" : "NOK");
-    printf("Test no %d, %s\n", i++, (!add(ipToIntConv("10.20.0.0"), 15)) ? "OK" : "NOK");
-    printf("Test no %d, %s\n", i++, (!add(ipToIntConv("10.20.0.0"), 16)) ? "OK" : "NOK");
-    printf("Test no %d, %s\n", i++, (!add(ipToIntConv("10.20.0.0"), 32)) ? "OK" : "NOK");
-    printf("Test no %d, Mask length: %d\n", i++,check(ipToIntConv("32.64.128.1")));
-    printf("Test no %d, Mask length: %d\n", i++,check(ipToIntConv("10.20.0.0")));
-    printf("Test no %d, Mask length: %d\n", i,check(ipToIntConv("10.22.0.0"))); //Should return -1 (it is not in the prefix database)
-
-    printf("Test no %d, %s\n", i++, (!add(ipToIntConv("12.20.0.0"), 20)) ? "OK" : "NOK");
-    printf("Test no %d, Mask length: %d\n", i++,check(ipToIntConv("12.20.128.1")));
-    printf("Test no %d, %s\n", i++, (!del(ipToIntConv("12.20.0.0"), 20)) ? "OK" : "NOK");
-    printf("Test no %d, Mask length: %d\n", i++,check(ipToIntConv("12.20.128.1")));
-
-
+    unsigned int iter = 1;
+    ///Checking add, check function
+    testFor_add_del_fun(add(ipToIntConv("32.64.128.0"), 20), &iter);
+    //1.^Should print OK
+    testFor_add_del_fun(add(ipToIntConv("32.64.128.0"), 20), &iter);
+    //2.Check if the same prefix will be added ^Should print NOK
+    testFor_add_del_fun(add(ipToIntConv("10.20.0.0"), 16), &iter);
+    //3.^Should print OK
+    testFor_add_del_fun(add(ipToIntConv("10.20.0.0"), 15), &iter);
+    //4.^Should print OK
+    testFor_add_del_fun(add(ipToIntConv("10.20.0.0"), 13), &iter);
+    //5.^Should print OK
+    testFor_check_fun(check(ipToIntConv("32.64.128.1")), &iter);
+    //6.^Should print Mask length: 20 is in the 32.64.128.0/20 prefix
+    testFor_check_fun(check(ipToIntConv("10.20.0.1")), &iter);
+    //7.^Should Mask length: 16 -> 10.20.0.0 is in the 10.20.0.0/16 prefix (16 is the smallest prefix)
+    testFor_check_fun(check(ipToIntConv("10.22.0.0")), &iter);
+    //8.^Should print Mask length: -1 -> 10.22.0.0 is not in the prefix database
+    ///Checking del function
+    testFor_add_del_fun(add(ipToIntConv("12.20.0.0"), 20), &iter);
+    //9.^Should print OK
+    testFor_check_fun(check(ipToIntConv("12.20.15.0")), &iter);
+    //10.^Should print Mask length: 20 is in the 12.20.0.0/20 prefix
+    testFor_add_del_fun(del(ipToIntConv("12.20.0.0"), 20), &iter);
+    //11.^Should print OK 12.20.15.1 is in the 12.20.0.0/20 prefix
+    testFor_check_fun(check(ipToIntConv("0")), &iter);
+    //12.^Should print Mask length: -1 -> 12.20.15.1 is not in the prefix database
     return 0;
 }
 
@@ -56,16 +69,16 @@ unsigned int binPow(unsigned int power) {
     }
     return result;
 }
-/// 1 4 6 0
+
 int del(const unsigned int base, const char mask) {
-    for(int i = (int)dataBase.dataSize; i>=0; i--) {
-        if(dataBase.data[dataBase.dataSize - i].base==base && dataBase.data[dataBase.dataSize - i].mask_length==mask) {
-            memset(&dataBase.data[dataBase.dataSize-i], 0, sizeof(struct prefix));
-            for(int j = i; j< dataBase.dataSize -1 ; i++) { //Moving
+    for(int i = 0; i<dataBase.dataSize; i++) {
+        if(dataBase.data[i].base==base && dataBase.data[i].mask_length==mask) {
+            memset(&dataBase.data[i], 0, sizeof(struct prefix));
+            for(int j = i; j< dataBase.dataSize -1 ; j++) { //Moving
                 dataBase.data[j] = dataBase.data[j+1];
             }
             --dataBase.dataSize;
-            return 0; //This prefix is already in the database
+            return 0;
         }
     }
     return -1;
@@ -94,9 +107,9 @@ int add(const unsigned int base, const char mask){
 }
 unsigned int ipToIntConv(const char *ip) {
 
-    const char *p = ip;
+    const char *start = ip;
     char *end;
-    unsigned int a = strtoul(p, &end, 10);
+    unsigned int a = strtoul(start, &end, 10);
     if (*end != '.') return -1;
     unsigned int b = strtoul(end + 1, &end, 10);
     if (*end != '.') return -1;
@@ -139,4 +152,12 @@ int sortPrefixData() {
         }
     }
     return 0;
+}
+
+///Tests
+void testFor_add_del_fun(const int result, unsigned *testNumber) {
+    printf("Test no %d, %s\n", (*testNumber)++, (!result) ? "OK" : "NOK");
+}
+void testFor_check_fun(const char result, unsigned *testNumber) {
+    printf("Test no %d, Mask length: %d\n", (*testNumber)++, result);
 }
