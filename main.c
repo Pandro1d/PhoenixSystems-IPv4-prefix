@@ -1,5 +1,6 @@
 #include <stdio.h>
 #include <stdlib.h>
+#include <string.h>
 #define MAX_DATA_SIZE 100 //Depends on size we need (can be of course changed into dynamic allocation, but it is slower)
 
 struct __attribute__((__packed__))prefix {
@@ -25,11 +26,8 @@ int sortPrefixData(); //Simple, once run bubble sort to sort added prefix to dat
 //
 
 int main() {
-    int i = 1;
-    struct prefix buff;
-    struct prefix_data_base buff1;
-    printf("%llu\n", sizeof(buff));
-    printf("%llu\n", sizeof(buff1));
+    unsigned int i = 1;
+
     printf("Test no %d, %s\n", i++, (!add(ipToIntConv("32.64.128.0"), 20)) ? "OK" : "NOK");
     printf("Test no %d, %s\n", i++, (!add(ipToIntConv("32.64.128.0"), 20)) ? "OK" : "NOK"); //Check if the same prefix will be added
     printf("Test no %d, %s\n", i++, (!add(ipToIntConv("11.20.0.0"), 16)) ? "OK" : "NOK");
@@ -39,6 +37,11 @@ int main() {
     printf("Test no %d, Mask length: %d\n", i++,check(ipToIntConv("32.64.128.1")));
     printf("Test no %d, Mask length: %d\n", i++,check(ipToIntConv("10.20.0.0")));
     printf("Test no %d, Mask length: %d\n", i,check(ipToIntConv("10.22.0.0"))); //Should return -1 (it is not in the prefix database)
+    printf("Test no %d, %s\n", i++, (!add(ipToIntConv("11.20.0.0"), 20)) ? "OK" : "NOK");
+    printf("Test no %d, Mask length: %d\n", i++,check(ipToIntConv("11.20.128.1")));
+    printf("Test no %d, %s\n", i++, (!del(ipToIntConv("11.20.128.1"), 20)) ? "OK" : "NOK");
+    printf("Test no %d, Mask length: %d\n", i++,check(ipToIntConv("11.20.128.1")));
+
 
     return 0;
 }
@@ -52,9 +55,14 @@ unsigned int binPow(unsigned int power) {
     }
     return result;
 }
+/// 1 4 6 0
 int del(const unsigned int base, const char mask) {
     for(int i = (int)dataBase.dataSize; i>=0; i--) {
         if(dataBase.data[dataBase.dataSize - i].base==base && dataBase.data[dataBase.dataSize - i].mask_length==mask) {
+            memset(&dataBase.data[dataBase.dataSize-i], 0, sizeof(dataBase.data[dataBase.dataSize-i]));
+            for(int j = i; j< dataBase.dataSize -1 ; i++) { //Moving
+                dataBase.data[j] = dataBase.data[j+1];
+            }
             return 0; //This prefix is already in the database
         }
     }
