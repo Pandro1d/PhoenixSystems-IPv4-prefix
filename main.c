@@ -37,10 +37,11 @@ int main() {
     printf("Test no %d, Mask length: %d\n", i++,check(ipToIntConv("32.64.128.1")));
     printf("Test no %d, Mask length: %d\n", i++,check(ipToIntConv("10.20.0.0")));
     printf("Test no %d, Mask length: %d\n", i,check(ipToIntConv("10.22.0.0"))); //Should return -1 (it is not in the prefix database)
-    printf("Test no %d, %s\n", i++, (!add(ipToIntConv("11.20.0.0"), 20)) ? "OK" : "NOK");
-    printf("Test no %d, Mask length: %d\n", i++,check(ipToIntConv("11.20.128.1")));
-    printf("Test no %d, %s\n", i++, (!del(ipToIntConv("11.20.128.1"), 20)) ? "OK" : "NOK");
-    printf("Test no %d, Mask length: %d\n", i++,check(ipToIntConv("11.20.128.1")));
+
+    printf("Test no %d, %s\n", i++, (!add(ipToIntConv("12.20.0.0"), 20)) ? "OK" : "NOK");
+    printf("Test no %d, Mask length: %d\n", i++,check(ipToIntConv("12.20.128.1")));
+    printf("Test no %d, %s\n", i++, (!del(ipToIntConv("12.20.0.0"), 20)) ? "OK" : "NOK");
+    printf("Test no %d, Mask length: %d\n", i++,check(ipToIntConv("12.20.128.1")));
 
 
     return 0;
@@ -59,10 +60,11 @@ unsigned int binPow(unsigned int power) {
 int del(const unsigned int base, const char mask) {
     for(int i = (int)dataBase.dataSize; i>=0; i--) {
         if(dataBase.data[dataBase.dataSize - i].base==base && dataBase.data[dataBase.dataSize - i].mask_length==mask) {
-            memset(&dataBase.data[dataBase.dataSize-i], 0, sizeof(dataBase.data[dataBase.dataSize-i]));
+            memset(&dataBase.data[dataBase.dataSize-i], 0, sizeof(struct prefix));
             for(int j = i; j< dataBase.dataSize -1 ; i++) { //Moving
                 dataBase.data[j] = dataBase.data[j+1];
             }
+            --dataBase.dataSize;
             return 0; //This prefix is already in the database
         }
     }
