@@ -17,17 +17,17 @@ struct __attribute__((__packed__))prefix_data_base { //Struct which contains sor
 int add(unsigned int, char);
 int del(unsigned int, char);
 inline char check(unsigned int);
-unsigned int binPow(unsigned int);
-unsigned int ipToIntConv(const char *);
-unsigned int maskLengthConv(char);
-int sortPrefixData(); //Simple, once run bubble sort to sort added prefix to database by mask length
+
+unsigned int binPow(unsigned int); //Increases the number 2 to the specified power (only positive values for this project).
+unsigned int ipToIntConv(const char *); //Changes string ip address to unsigned.
+unsigned int maskLengthConv(char); //Changes mask length into decimal number of mask.
+int sortPrefixData(); //Simple, once run bubble sort to sort added prefix to database by mask length (The largest number first).
 
 void testFor_add_del_fun(int, unsigned *);
 void testFor_check_fun(char, unsigned *);
 
 //GLOBAL VAR
 struct prefix_data_base dataBase = {{0,0,0}, 0};
-
 
 int main() {
     unsigned int iter = 1;
@@ -48,15 +48,17 @@ int main() {
     //7.^Should Mask length: 16 -> 10.20.0.0 is in the 10.20.0.0/16 prefix (16 is the smallest prefix)
     testFor_check_fun(check(ipToIntConv("10.22.0.0")), &iter);
     //8.^Should print Mask length: -1 -> 10.22.0.0 is not in the prefix database
+    testFor_check_fun(check(ipToIntConv("255.255.255.255")), &iter);
+    //9.^Should print Mask length: -1 -> 255.255.255.255 is not in the prefix database
     ///Checking del function
     testFor_add_del_fun(add(ipToIntConv("12.20.0.0"), 20), &iter);
-    //9.^Should print OK
+    //10.^Should print OK
     testFor_check_fun(check(ipToIntConv("12.20.15.0")), &iter);
-    //10.^Should print Mask length: 20 is in the 12.20.0.0/20 prefix
+    //11.^Should print Mask length: 20 is in the 12.20.0.0/20 prefix
     testFor_add_del_fun(del(ipToIntConv("12.20.0.0"), 20), &iter);
-    //11.^Should print OK 12.20.15.1 is in the 12.20.0.0/20 prefix
+    //12.^Should print OK 12.20.15.1 is in the 12.20.0.0/20 prefix
     testFor_check_fun(check(ipToIntConv("0")), &iter);
-    //12.^Should print Mask length: -1 -> 12.20.15.1 is not in the prefix database
+    //13.^Should print Mask length: -1 -> 12.20.15.1 is not in the prefix database
     return 0;
 }
 
@@ -105,6 +107,16 @@ int add(const unsigned int base, const char mask){
     }
     return 0;
 }
+
+char check(unsigned int ip) {
+    for(int i = 0; i<dataBase.dataSize; i++) {
+        if((ip & dataBase.data[i].mask) == dataBase.data[i].base) {
+            return dataBase.data[i].mask_length;
+        }
+    }
+    return -1; //Not found ip in prefix database
+}
+
 unsigned int ipToIntConv(const char *ip) {
 
     const char *start = ip;
@@ -127,15 +139,6 @@ unsigned int maskLengthConv(const char mask) {
         mask_buff += binPow(32-i);
     }
     return mask_buff;
-}
-
-char check(unsigned int ip) {
-    for(int i = 0; i<dataBase.dataSize; i++) {
-        if((ip & dataBase.data[i].mask) == dataBase.data[i].base) {
-            return dataBase.data[i].mask_length;
-        }
-    }
-    return -1; //Not found ip in prefix database
 }
 
 int sortPrefixData() {
