@@ -114,20 +114,20 @@ For example:
 
 ### Numerical Assertions: Bitwise
 
-    TEST_ASSERT_BITS(mask, expected, actual)
+    TEST_ASSERT_BITS(subnetMask, expected, actual)
 
-Use an integer mask to specify which bits should be compared between two other integers.
-High bits in the mask are compared, low bits ignored.
+Use an integer subnetMask to specify which bits should be compared between two other integers.
+High bits in the subnetMask are compared, low bits ignored.
 
-    TEST_ASSERT_BITS_HIGH(mask, actual)
+    TEST_ASSERT_BITS_HIGH(subnetMask, actual)
 
-Use an integer mask to specify which bits should be inspected to determine if they are all set high.
-High bits in the mask are compared, low bits ignored.
+Use an integer subnetMask to specify which bits should be inspected to determine if they are all set high.
+High bits in the subnetMask are compared, low bits ignored.
 
-    TEST_ASSERT_BITS_LOW(mask, actual)
+    TEST_ASSERT_BITS_LOW(subnetMask, actual)
 
-Use an integer mask to specify which bits should be inspected to determine if they are all set low.
-High bits in the mask are compared, low bits ignored.
+Use an integer subnetMask to specify which bits should be inspected to determine if they are all set low.
+High bits in the subnetMask are compared, low bits ignored.
 
     TEST_ASSERT_BIT_HIGH(bit, actual)
 

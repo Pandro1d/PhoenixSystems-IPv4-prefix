@@ -131,10 +131,10 @@ class UnityModuleGenerator
     module_name = File.basename(module_name)
 
     # create triad definition
-    prefix = @options[:test_prefix] || 'Test'
-    triad = [{ ext: '.c', path: @options[:path_src], prefix: '', template: TEMPLATE_SRC, inc: :src, boilerplate: @options[:boilerplates][:src] },
-             { ext: '.h', path: @options[:path_inc], prefix: '',     template: TEMPLATE_INC, inc: :inc, boilerplate: @options[:boilerplates][:inc] },
-             { ext: '.c', path: @options[:path_tst], prefix: prefix, template: TEMPLATE_TST, inc: :tst, boilerplate: @options[:boilerplates][:tst] }]
+    Prefix = @options[:test_prefix] || 'Test'
+    triad = [{ ext: '.c', path: @options[:path_src], Prefix: '', template: TEMPLATE_SRC, inc: :src, boilerplate: @options[:boilerplates][:src] },
+             { ext: '.h', path: @options[:path_inc], Prefix: '',     template: TEMPLATE_INC, inc: :inc, boilerplate: @options[:boilerplates][:inc] },
+             { ext: '.c', path: @options[:path_tst], Prefix: Prefix, template: TEMPLATE_TST, inc: :tst, boilerplate: @options[:boilerplates][:tst] }]
 
     # prepare the pattern for use
     pattern = (pattern || @options[:pattern] || 'src').downcase
@@ -149,7 +149,7 @@ class UnityModuleGenerator
     triad.each do |cfg|
       patterns.each_pair do |pattern_file, pattern_traits|
         submodule_name = create_filename(module_name, pattern_file)
-        filename = cfg[:prefix] + submodule_name + cfg[:ext]
+        filename = cfg[:Prefix] + submodule_name + cfg[:ext]
         files << {
           path: (Pathname.new("#{cfg[:path]}#{subfolder}") + filename).cleanpath,
           name: submodule_name,

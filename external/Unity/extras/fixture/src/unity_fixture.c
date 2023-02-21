@@ -222,7 +222,7 @@ int UnityGetCommandLineOptions(int argc, const char* argv[])
             UNITY_PRINT_EOL();
 #else
             /* Default help suffix if a custom one is not defined */
-            UnityPrint("More information about Unity: https://www.throwtheswitch.org/external");
+            UnityPrint("More information about Unity: https://www.throwtheswitch.org/unity");
             UNITY_PRINT_EOL();
 #endif
             return 1;  /* Exit without running the tests */

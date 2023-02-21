@@ -143,8 +143,8 @@ This option should be defined if you are mixing C and CPP and want your test run
 
 ##### `:mock_prefix` and `:mock_suffix`
 
-Unity automatically generates calls to Init, Verify and Destroy for every file included in the main test file that starts with the given mock prefix and ends with the given mock suffix, file extension not included.
-By default, Unity assumes a `Mock` prefix and no suffix.
+Unity automatically generates calls to Init, Verify and Destroy for every file included in the main test file that starts with the given mock Prefix and ends with the given mock suffix, file extension not included.
+By default, Unity assumes a `Mock` Prefix and no suffix.
 
 ##### `:plugins`
 

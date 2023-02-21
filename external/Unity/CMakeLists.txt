@@ -11,7 +11,7 @@
 
 cmake_minimum_required(VERSION 3.12)
 
-# Read src/external.h file and get project version from it
+# Read src/unity.h file and get project version from it
 set(UNITY_HEADER "src/unity.h")
 
 file(STRINGS "${UNITY_HEADER}" UNITY_HEADER_CONTENT 

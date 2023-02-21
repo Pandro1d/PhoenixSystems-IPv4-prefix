@@ -178,7 +178,7 @@ class UnityToJUnit
   end
 
   def write_suite_header(counts, stream)
-    stream.puts "\t<testsuite errors=\"0\" skipped=\"#{counts[:ignored]}\" failures=\"#{counts[:failed]}\" tests=\"#{counts[:total]}\" name=\"external\">"
+    stream.puts "\t<testsuite errors=\"0\" skipped=\"#{counts[:ignored]}\" failures=\"#{counts[:failed]}\" tests=\"#{counts[:total]}\" name=\"unity\">"
   end
 
   def write_failures(results, stream)

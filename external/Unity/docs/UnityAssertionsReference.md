@@ -308,15 +308,15 @@ otherwise showing the HEX escape code for the characters.
 Masked and bit-level assertions produce output formatted in hexadecimal. Unity
 output is big endian.
 
-#### `TEST_ASSERT_BITS (mask, expected, actual)`
+#### `TEST_ASSERT_BITS (subnetMask, expected, actual)`
 
 Only compares the masked (i.e. high) bits of `expected` and `actual` parameters.
 
-#### `TEST_ASSERT_BITS_HIGH (mask, actual)`
+#### `TEST_ASSERT_BITS_HIGH (subnetMask, actual)`
 
 Asserts the masked bits of the `actual` parameter are high.
 
-#### `TEST_ASSERT_BITS_LOW (mask, actual)`
+#### `TEST_ASSERT_BITS_LOW (subnetMask, actual)`
 
 Asserts the masked bits of the `actual` parameter are low.
 

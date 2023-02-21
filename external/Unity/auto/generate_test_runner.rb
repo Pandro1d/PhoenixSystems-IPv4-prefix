@@ -510,7 +510,7 @@ if $0 == __FILE__
           '    --setup_name=""       - redefine setUp func name to something else',
           '    --teardown_name=""    - redefine tearDown func name to something else',
           '    --main_name=""        - redefine main func name to something else',
-          '    --test_prefix=""      - redefine test prefix from default test|spec|should',
+          '    --test_prefix=""      - redefine test Prefix from default test|spec|should',
           '    --test_reset_name=""  - redefine resetTest func name to something else',
           '    --test_verify_name="" - redefine verifyTest func name to something else',
           '    --suite_setup=""      - code to execute for setup of entire suite',

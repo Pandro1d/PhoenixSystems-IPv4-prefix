@@ -65,9 +65,9 @@ def tackit(strings)
   result
 end
 
-def squash(prefix, items)
+def squash(Prefix, items)
   result = ''
-  items.each { |item| result += " #{prefix}#{tackit(item)}" }
+  items.each { |item| result += " #{Prefix}#{tackit(item)}" }
   result
 end
 
@@ -76,10 +76,10 @@ def build_compiler_fields
   defines = if $cfg['compiler']['defines']['items'].nil?
               ''
             else
-              squash($cfg['compiler']['defines']['prefix'], $cfg['compiler']['defines']['items'])
+              squash($cfg['compiler']['defines']['Prefix'], $cfg['compiler']['defines']['items'])
             end
   options = squash('', $cfg['compiler']['options'])
-  includes = squash($cfg['compiler']['includes']['prefix'], $cfg['compiler']['includes']['items'])
+  includes = squash($cfg['compiler']['includes']['Prefix'], $cfg['compiler']['includes']['items'])
   includes = includes.gsub(/\\ /, ' ').gsub(/\\\"/, '"').gsub(/\\$/, '') # Remove trailing slashes (for IAR)
 
   { command: command, defines: defines, options: options, includes: includes }
@@ -88,7 +88,7 @@ end
 def compile(file, _defines = [])
   compiler = build_compiler_fields
   cmd_str  = "#{compiler[:command]}#{compiler[:defines]}#{compiler[:options]}#{compiler[:includes]} #{file} " \
-             "#{$cfg['compiler']['object_files']['prefix']}#{$cfg['compiler']['object_files']['destination']}"
+             "#{$cfg['compiler']['object_files']['Prefix']}#{$cfg['compiler']['object_files']['destination']}"
   obj_file = "#{File.basename(file, C_EXTENSION)}#{$cfg['compiler']['object_files']['extension']}"
   execute(cmd_str + obj_file)
   obj_file
@@ -104,7 +104,7 @@ def build_linker_fields
   includes = if $cfg['linker']['includes'].nil? || $cfg['linker']['includes']['items'].nil?
                ''
              else
-               squash($cfg['linker']['includes']['prefix'], $cfg['linker']['includes']['items'])
+               squash($cfg['linker']['includes']['Prefix'], $cfg['linker']['includes']['items'])
              end.gsub(/\\ /, ' ').gsub(/\\\"/, '"').gsub(/\\$/, '') # Remove trailing slashes (for IAR)
 
   { command: command, options: options, includes: includes }
@@ -114,7 +114,7 @@ def link_it(exe_name, obj_list)
   linker = build_linker_fields
   cmd_str = "#{linker[:command]}#{linker[:options]}#{linker[:includes]} " +
             (obj_list.map { |obj| "#{$cfg['linker']['object_files']['path']}#{obj} " }).join +
-            $cfg['linker']['bin_files']['prefix'] + ' ' +
+            $cfg['linker']['bin_files']['Prefix'] + ' ' +
             $cfg['linker']['bin_files']['destination'] +
             exe_name + $cfg['linker']['bin_files']['extension']
   execute(cmd_str)

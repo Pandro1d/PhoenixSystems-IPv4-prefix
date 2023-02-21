@@ -37,9 +37,9 @@ void testUnitySizeInitializationReminder(void)
 {
     /* This test ensures that sizeof(struct UNITY_STORAGE_T) doesn't change. If this
      * test breaks, go look at the initialization of the Unity global variable
-     * in external.c and make sure we're filling in the proper fields. */
+     * in unity.c and make sure we're filling in the proper fields. */
     const char* message = "Unexpected size for UNITY_STORAGE_T struct. Please check that "
-                     "the initialization of the Unity symbol in external.c is "
+                     "the initialization of the Unity symbol in unity.c is "
                      "still correct.";
 
     /* Define a structure with all the same fields as `struct UNITY_STORAGE_T`. */

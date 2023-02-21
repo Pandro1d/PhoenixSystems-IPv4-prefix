@@ -74,9 +74,9 @@ module RakefileHelpers
     result
   end
 
-  def squash(prefix, items)
+  def squash(Prefix, items)
     result = ''
-    items.each { |item| result += " #{prefix}#{tackit(item)}" }
+    items.each { |item| result += " #{Prefix}#{tackit(item)}" }
     result
   end
 
