@@ -10,9 +10,10 @@
 #include <string.h>
 #include <stdint.h>
 #include <limits.h>
-//IPv4 structs
+
+//IPv4 manager structs
 #define MAX_DATA_SIZE 100
-#define MAX_
+
 struct __attribute__((__packed__))Prefix {
     unsigned int base;
     unsigned int subnetMask;
@@ -20,19 +21,22 @@ struct __attribute__((__packed__))Prefix {
     char mask;
 };
 
-//Struct which contains sorted prefixes from the highest subnetMask number to its lowest number.
+//Struct which contains sorted prefixes from the highest mask length number to its lowest number.
 struct __attribute__((__packed__))PrefixDataBase {
     struct Prefix data[MAX_DATA_SIZE];
-    unsigned int dataSize;
+    unsigned int size;
 };
 //Function definitions
 int add(struct PrefixDataBase *dataBase, unsigned int base, char mask);
 int del(struct PrefixDataBase *dataBase, unsigned int base, char mask);
-inline unsigned char check(struct PrefixDataBase *dataBase, unsigned int ip);
+inline char check(struct PrefixDataBase *dataBase, unsigned int ip);
 
-unsigned int binPow(unsigned int); //Increases the number 2 to the specified power (only positive values for this project).
-unsigned int IPv4_stringToIntConv(const char *ip); //Changes string ip address to unsigned.
-unsigned int maskLengthConv(char mask); //Changes subnetMask length into decimal number of subnetMask.
+//Increases the number 2 to the specified power. Is used by maskLengthToSubnetConv function
+unsigned int binPow(unsigned int);
+//Changes string ip address to unsigned.
+unsigned int IPv4_stringToIntConv(const char *ip);
+//Changes subnetMask length into decimal number of subnetMask.
+unsigned int maskLengthToSubnetConv(char mask);
 
 
 #endif//PHOENIXSYSTEMS_IPV4_PREFIX_IPV4_PREFIX_MANAGER_H
