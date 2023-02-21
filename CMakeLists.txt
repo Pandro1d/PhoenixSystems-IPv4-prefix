@@ -5,7 +5,7 @@ set(CMAKE_C_STANDARD 17)
 
 set(TARGET_GROUP test CACHE STRING "Group to build")
 
-add_subdirectory(src)
+add_subdirectory(IPv4_prefix_manager)
 
 if(TARGET_GROUP STREQUAL production)
     add_subdirectory(main)

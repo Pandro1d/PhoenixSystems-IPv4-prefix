@@ -1,3 +1,3 @@
-add_executable(main_ipv4 main.c)
+add_executable(main main.c)
 
-target_link_libraries(main_ipv4 src)
+target_link_libraries(main IPv4_module)
