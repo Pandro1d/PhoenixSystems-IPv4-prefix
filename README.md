@@ -1,5 +1,5 @@
 # PhoenixSystems-IPv4-Prefix
-Simple IPv4 prefix management with adding, deleting and adding functions.
+Simple IPv4 prefix management with adding, deleting and checking functions.
 ## Requirements and compilation
 [Here](build/Compilation.md)
 
