@@ -1,4 +1,4 @@
-cmake_minimum_required(VERSION 3.21)
+cmake_minimum_required(VERSION 3.20)
 project(PhoenixSystems_IPv4_prefix C)
 
 set(CMAKE_C_STANDARD 17)
@@ -9,6 +9,7 @@ add_subdirectory(IPv4_prefix_manager)
 
 if(TARGET_GROUP STREQUAL production)
     add_subdirectory(main)
+
 elseif(TARGET_GROUP STREQUAL test)
     include(CTest)
 
