@@ -30,7 +30,7 @@ struct __attribute__((__packed__)) PrefixDatabase {
 //Function definitions
 int add(struct PrefixDatabase *dataBase, unsigned int base, char mask, char *status);
 int del(struct PrefixDatabase *dataBase, unsigned int base, char mask, const char *status);
-inline char check(struct PrefixDatabase *dataBase, unsigned int ip, const char *status);
+char check(struct PrefixDatabase *dataBase, unsigned int ip, const char *status);
 
 //Increases the number 2 to the specified power. Is used by maskLengthToSubnetConv function
 unsigned int IPv4_stringToIntConv(const char *ip, char *status);
