@@ -33,7 +33,6 @@ int del(struct PrefixDatabase *dataBase, unsigned int base, char mask, const cha
 inline char check(struct PrefixDatabase *dataBase, unsigned int ip, const char *status);
 
 //Increases the number 2 to the specified power. Is used by maskLengthToSubnetConv function
-
 unsigned int IPv4_stringToIntConv(const char *ip, char *status);
 //Changes subnetMask length into decimal number of subnetMask.
 unsigned int maskLengthToSubnetConv(char maskLength, char *status);

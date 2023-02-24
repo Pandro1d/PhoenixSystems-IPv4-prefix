@@ -71,6 +71,8 @@ void test_overloadAddingPrefixes() {
         add(&dataBaseTest, iter, 10, &status);
     }
     TEST_ASSERT_EQUAL(-1, add(&dataBaseTest, iter+1, 10, &status));
+    TEST_ASSERT_EQUAL(-1, add(&dataBaseTest, iter+2, 10, &status));
+    TEST_ASSERT_EQUAL(-1, add(&dataBaseTest, iter+3, 10, &status));
 }
 void test_addingPrefixes() {
     struct PrefixDatabase dataBaseTest = {0};
