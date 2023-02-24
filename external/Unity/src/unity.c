@@ -2016,10 +2016,10 @@ static void UnityPrintFVA(const char* format, va_list va)
                             {
                                 UNITY_UINT number;
                                 UNITY_EXTRACT_ARG(UNITY_UINT, number, length_mod, va, unsigned int);
-                                const UNITY_UINT mask = (UNITY_UINT)0 - (UNITY_UINT)1;
+                                const UNITY_UINT maskLength = (UNITY_UINT)0 - (UNITY_UINT)1;
                                 UNITY_OUTPUT_CHAR('0');
                                 UNITY_OUTPUT_CHAR('b');
-                                UnityPrintMask(mask, number);
+                                UnityPrintMask(maskLength, number);
                                 break;
                             }
                         case 'x':

@@ -4,7 +4,9 @@
 
 # Compilation
 In build directory:
-<code>cmake .. </code>
-<code>make</code>
+
+`cmake ..`
+
+`make`
 # Run tests
-In  directory execute command <code>./test/test_IPv4_app</code>
+In  directory execute command `./test/test_IPv4_app`
